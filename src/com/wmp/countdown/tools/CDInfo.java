@@ -5,7 +5,7 @@ import com.wmp.countdown.tools.uiTools.CDColor;
 public class CDInfo {
 
     public static final String NAME = "Countdown";
-    public static final String VERSION = "3.0.0";
+    public static final String VERSION = "2.0.0";
     public static final String AUTHOR = "WMP";
 
     public static final String DATA_PATH;
