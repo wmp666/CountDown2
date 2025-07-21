@@ -2,10 +2,14 @@ package com.wmp.countdown.ui.frame;
 
 import com.wmp.WCompanent.WOptionPane;
 import com.wmp.WCompanent.WTextButton;
+import com.wmp.countdown.tools.io.ControlCDInfo;
 import com.wmp.countdown.tools.uiTools.CDFont;
 import com.wmp.countdown.tools.CDInfo;
 import com.wmp.countdown.tools.printLog.Log;
 import com.wmp.countdown.tools.uiTools.CDFontSizeStyle;
+import com.wmp.countdown.ui.component.CDButtonsPanel;
+import com.wmp.countdown.ui.component.TimePanel;
+import com.wmp.countdown.ui.component.TitleLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,52 +18,60 @@ import java.awt.event.WindowListener;
 import java.net.MalformedURLException;
 
 public class MainFrame extends JDialog implements WindowListener {
+
+    private final TitleLabel title = new TitleLabel();
+    private final TimePanel timePanel = new TimePanel();
+    private final CDButtonsPanel buttonsPanel = new CDButtonsPanel();
+
     public MainFrame() {
         initFrame();
         Container pane = this.getContentPane();
 
-        JLabel title = new JLabel("距离" + CDInfo.title + "还剩:");
-        title.setForeground(CDInfo.COLOR.getTextColor());
-        title.setFont(CDFont.getCDFont(Font.BOLD, CDFontSizeStyle.MORE_BIG));
         pane.add(title, BorderLayout.NORTH);
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new FlowLayout());
-        buttonsPanel.setOpaque(false);
+        pane.add(timePanel, BorderLayout.CENTER);
 
-        WTextButton exitButton = new WTextButton("退出");
-        exitButton.addActionListener(e -> {
-            int i = Log.info.showChooseDialog(this, "退出", "是否退出?");
-            if (i == JOptionPane.YES_OPTION){
-                Log.exit(0);
-            }
+        pane.add(buttonsPanel, BorderLayout.SOUTH);
+
+
+        Timer refreshTimer = new Timer(200, e -> {
+            refresh();
+
+
+            this.pack();
+            //获取屏幕大小
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            this.setLocation(screenSize.width - this.getWidth(), 0);
         });
-        buttonsPanel.add(exitButton);
-
-        WTextButton aboutButton = new WTextButton("关于");
-        aboutButton.addActionListener(e -> {
-            try {
-                new AboutDialog();
-            } catch (Exception ex) {
-                Log.err.print( "Log", "关于窗口打开失败:" +  ex);
-                throw new RuntimeException(ex);
-            }
-        });
-        buttonsPanel.add(aboutButton);
+        refreshTimer.setRepeats(true);// 重复
+        refreshTimer.start();
 
 
-        this.pack();
         this.setVisible(true);
 
     }
 
+
     private void initFrame() {
+        Log.info.systemPrint("MainFrame", "开始初始化窗口");
+
         this.setTitle("Countdown V" + CDInfo.VERSION);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setUndecorated(true);
         this.setSize(400, 300);
-        this.getContentPane().setBackground(CDInfo.COLOR.getBgColor());
         this.getContentPane().setLayout(new BorderLayout());
+    }
+
+    public void refresh(){
+
+        ControlCDInfo.initCDInfo();
+
+        this.getContentPane().setBackground(CDInfo.COLOR.getBgColor());
+
+
+        title.refresh();
+        timePanel.refresh();
+        buttonsPanel.refresh();
     }
 
     @Override
@@ -69,7 +81,7 @@ public class MainFrame extends JDialog implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        int i = Log.info.showChooseDialog(this, "提示", "是否关闭?");
+        int i = Log.info.showChooseDialog(null, "提示", "是否关闭?");
         if (i == WOptionPane.YES_OPTION) Log.exit(0);
     }
 

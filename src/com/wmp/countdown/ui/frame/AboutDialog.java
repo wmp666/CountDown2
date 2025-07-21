@@ -1,27 +1,23 @@
 package com.wmp.countdown.ui.frame;
 
-import com.wmp.WCompanent.WIconButton;
-import com.wmp.WCompanent.WTextButton;
 import com.wmp.WCompanent.tools.GetIcon;
 import com.wmp.countdown.tools.CDInfo;
 import com.wmp.countdown.tools.OpenInExp;
 import com.wmp.countdown.tools.io.GetPath;
 import com.wmp.countdown.tools.printLog.Log;
-import com.wmp.countdown.tools.uiTools.CDFont;
 import com.wmp.countdown.tools.uiTools.CDFontSizeStyle;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 public class AboutDialog extends JDialog{
 
 
     public AboutDialog() throws MalformedURLException {
+
+        Log.info.print("关于", "正在打开关于窗口");
 
         this.setTitle("关于");
         this.setSize(300, 400);
@@ -38,18 +34,18 @@ public class AboutDialog extends JDialog{
 
         JLabel title = new JLabel("程序名: " + CDInfo.NAME);
         title.setBounds(120, 10, 200, 20);
-        title.setFont(CDFont.getCDFont(Font.BOLD, CDFontSizeStyle.SMALL));
+        title.setFont(CDInfo.FONT.getCDFont(Font.BOLD, CDFontSizeStyle.SMALL));
         title.setForeground( CDInfo.COLOR.getTextColor());
 
         //将图标显示在文字上方
         JLabel version = new JLabel("版本: " + CDInfo.VERSION);
         version.setBounds(120, 40, 200, 20);
-        version.setFont(CDFont.getCDFont(Font.BOLD, CDFontSizeStyle.SMALL));
+        version.setFont(CDInfo.FONT.getCDFont(Font.BOLD, CDFontSizeStyle.SMALL));
         version.setForeground( CDInfo.COLOR.getTextColor());
 
         JLabel author = new JLabel("作者: " + CDInfo.AUTHOR);
         author.setBounds(120, 70, 200, 20);
-        author.setFont(CDFont.getCDFont(Font.BOLD, CDFontSizeStyle.SMALL));
+        author.setFont(CDInfo.FONT.getCDFont(Font.BOLD, CDFontSizeStyle.SMALL));
         author.setForeground( CDInfo.COLOR.getTextColor());
 
         //view = new JPanel();
@@ -62,7 +58,7 @@ public class AboutDialog extends JDialog{
         initMenuBar();
 
 
-
+        this.setVisible(true);
     }
 
     private void initMenuBar() {
@@ -74,18 +70,18 @@ public class AboutDialog extends JDialog{
         JMenu chat = new JMenu("社交");
 
         JMenuItem weChat = new JMenuItem("微信");
-        weChat.setIcon(GetIcon.getIcon(getClass().getResource("/image/wechat.png"), 20, 20));
+        weChat.setIcon(GetIcon.getIcon(getClass().getResource("/images/wechat.png"), 20, 20));
         weChat.addActionListener(e ->
                 Log.info.message(this, "关于-个人信息", "微信: w13607088913")
         );
 
         JMenuItem qq = new JMenuItem("QQ");
-        qq.setIcon(GetIcon.getIcon(getClass().getResource("/image/qq.png"), 20, 20));
+        qq.setIcon(GetIcon.getIcon(getClass().getResource("/images/qq.png"), 20, 20));
         qq.addActionListener(e ->
                 Log.info.message(this, "关于-个人信息", "QQ: 2134868121"));
 
         JMenuItem bilibili = new JMenuItem("哔哩哔哩");
-        bilibili.setIcon(GetIcon.getIcon(getClass().getResource("/image/bilibili.png"), 20, 20));
+        bilibili.setIcon(GetIcon.getIcon(getClass().getResource("/images/bilibili.png"), 20, 20));
         bilibili.addActionListener(e -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://space.bilibili.com/1075810224/"));
@@ -99,10 +95,10 @@ public class AboutDialog extends JDialog{
         chat.add(bilibili);
 
         JMenu github = new JMenu("Github");
-        github.setIcon(GetIcon.getIcon(getClass().getResource("/image/github.png"), 20, 20));
+        github.setIcon(GetIcon.getIcon(getClass().getResource("/images/github.png"), 20, 20));
 
         JMenuItem authorGithub = new JMenuItem("作者");
-        authorGithub.setIcon(GetIcon.getIcon(getClass().getResource("/image/github.png"), 20, 20));
+        authorGithub.setIcon(GetIcon.getIcon(getClass().getResource("/images/github.png"), 20, 20));
         authorGithub.addActionListener(e -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://github.com/wmp666"));
@@ -112,7 +108,7 @@ public class AboutDialog extends JDialog{
         });
 
         JMenuItem repo = new JMenuItem("仓库");
-        repo.setIcon(GetIcon.getIcon(getClass().getResource("/image/github.png"), 20, 20));
+        repo.setIcon(GetIcon.getIcon(getClass().getResource("/images/github.png"), 20, 20));
         repo.addActionListener(e -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://github.com/wmp666/CountDown2"));
@@ -125,15 +121,23 @@ public class AboutDialog extends JDialog{
         github.add(repo);
 
         JMenuItem appPath = new JMenuItem("程序路径");
-        appPath.setIcon(GetIcon.getIcon(getClass().getResource("/image/openExp.png"), 20, 20));
+        appPath.setIcon(GetIcon.getIcon(getClass().getResource("/images/openExp.png"), 20, 20));
         appPath.addActionListener(e -> {
             OpenInExp.open(GetPath.getAppPath(GetPath.APPLICATION_PATH));
+
+        });
+
+        JMenuItem dataPath = new JMenuItem("数据路径");
+        dataPath.setIcon(GetIcon.getIcon(getClass().getResource("/images/openExp.png"), 20, 20));
+        dataPath.addActionListener(e -> {
+            OpenInExp.open(CDInfo.DATA_PATH);
 
         });
 
         menu.add(chat);
         menu.add(github);
         menu.add(appPath);
+        menu.add(dataPath);
 
         menuBar.add(menu);
 
@@ -146,7 +150,7 @@ public class AboutDialog extends JDialog{
         getSource.addActionListener(e -> Log.info.message(this, "获取源代码", "请前往仓库寻找"));
 
         JMenuItem checkUpdate = new JMenuItem("检查更新");
-        checkUpdate.setIcon(GetIcon.getIcon(getClass().getResource("/image/light/update_0.png"), 20, 20));
+        checkUpdate.setIcon(GetIcon.getIcon(getClass().getResource("/images/light/update_0.png"), 20, 20));
         checkUpdate.addActionListener(e -> Log.info.message(this, "检查更新", "请前往仓库寻找"));
 
         downloadMenu.add(getSource);
@@ -157,7 +161,7 @@ public class AboutDialog extends JDialog{
         JMenu helpMenu = new JMenu("帮助");
 
         JMenuItem helpDoc = new JMenuItem("帮助文档");
-        helpDoc.setIcon(GetIcon.getIcon(getClass().getResource("/image/doc.png"), 20, 20));
+        helpDoc.setIcon(GetIcon.getIcon(getClass().getResource("/images/doc.png"), 20, 20));
         helpDoc.addActionListener(e -> {
             Log.info.message(null, "IOForInfo-帮助文档", "前面的区域,以后再来探索吧");
 

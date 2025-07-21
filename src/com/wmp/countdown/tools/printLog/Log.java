@@ -174,6 +174,7 @@ public class Log {
                 try {
                     Files.createDirectories(Paths.get(CDInfo.DATA_PATH + "Log\\"));
                 } catch (IOException ex) {
+                    Log.err.print(null, "日志-打开所在位置", "创建目录失败");
                     throw new RuntimeException(ex);
                 }
             }

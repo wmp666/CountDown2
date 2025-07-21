@@ -87,4 +87,14 @@ public class CDColor {
             throw new RuntimeException(e);
         }
     }
+
+    public void setAllColor(String textColorStr, String bgColorStr, String mainColorStr) {
+        this.textColorStr = textColorStr;
+        this.bgColorStr = bgColorStr;
+        this.mainColorStr = mainColorStr;
+    }
+
+    public String[] getAllColorStyle() {
+        return COLOR_MAP.keySet().toArray(new String[0]);
+    }
 }

@@ -97,7 +97,7 @@ public class IOForInfo {
 
             Log.info.print("IOForInfo-获取数据", "数据内容: " + replace);
             Log.info.print("IOForInfo-获取数据", file.getPath() + "文件读取完成");
-            return !s.isEmpty() ? s : "err";
+            return  s ;
         } catch (IOException e) {
             Log.err.print("IOForInfo-获取数据", file.getPath() + "文件读取失败");
             return "err";

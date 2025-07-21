@@ -7,16 +7,16 @@ import java.util.Arrays;
 
 public class CDFont {
 
-    private static String fontName = "微软雅黑";
+    private String fontName = "微软雅黑";
 
     private static int BigBigSize = 100;
     private static int moreBigSize = 60;
-    private static int bigSize = 24;
+    private static int bigSize = 40;
     private static int normalSize = 19;
     private static int smallSize = 15;
     private static int moreSmallSize = 12;
 
-    public static Font getCDFont(int fontStyle, CDFontSizeStyle sizeStyle) {
+    public Font getCDFont(int fontStyle, CDFontSizeStyle sizeStyle) {
         int size = 0;
         switch (sizeStyle) {
             case BIG_BIG -> size = BigBigSize;
@@ -37,11 +37,11 @@ public class CDFont {
         return fontNames;
     }
 
-    public static String getFontName() {
+    public String getFontName() {
         return fontName;
     }
 
-    public static void setFontName(String fontName) {
+    public void setFontName(String fontName) {
         //获取所有字体
         String[] fontNames = getAllFontName();
         //判断是否存在该字体
@@ -50,7 +50,7 @@ public class CDFont {
             Log.err.print("fontNames", "不存在该字体:" + fontName);
             return;
         }
-        CDFont.fontName = fontName;
+       this.fontName = fontName;
     }
 
     public static void setSize(int bigBigSize, int moreBigSize, int bigSize, int normalSize, int smallSize, int moreSmallSize) {
