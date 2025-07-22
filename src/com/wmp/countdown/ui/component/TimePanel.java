@@ -50,7 +50,7 @@ public class TimePanel extends JPanel implements CDComponent {
 
             dayLabel.setText(String.format("%02d", time / (24L *60*60*1000)) + "天");
             time %= 24L *60*60*1000;// 去除n天(n * 24h)的时间,只留下余数
-            otherTimeLabel.setText(String.format("%02d:%02d:%02d", time / 3600000, time / 60000 % 60, time / 1000 % 60));
+            otherTimeLabel.setText(String.format("%02d时%02d分%02d秒", time / 3600000, time / 60000 % 60, time / 1000 % 60));
         });
         timer.setRepeats(true);
         timer.start();

@@ -21,8 +21,16 @@ public class CDButtonsPanel extends JPanel implements CDComponent{
 
     private void initButtons() {
         WTextButton exitButton = new WTextButton("退出");
+        exitButton.setForeground(Color.red);
         exitButton.setFont(CDInfo.FONT.getCDFont(Font.BOLD, CDFontSizeStyle.NORMAL));
         exitButton.addActionListener(e -> {
+
+            if (!CDInfo.isCanExit) {
+                Log.err.print("退出", "错误的关闭请求");
+                return;
+            }
+
+
             int i = Log.info.showChooseDialog(null, "退出", "是否退出?");
             if (i == JOptionPane.YES_OPTION){
                 Log.exit(0);

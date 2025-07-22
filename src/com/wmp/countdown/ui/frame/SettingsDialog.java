@@ -25,6 +25,7 @@ public class SettingsDialog extends JDialog {
     private final WComboBox bgColorComboBox = new WComboBox();
     private final WComboBox mainColorComboBox = new WComboBox();
     private final WComboBox fontComboBox = new WComboBox();
+    private final JCheckBox canExitCheckBox = new JCheckBox("允许退出");
 
 
     public SettingsDialog() {
@@ -44,7 +45,7 @@ public class SettingsDialog extends JDialog {
             Log.info.message(this, "SettingsDialog", "正在保存设置");
             ControlCDInfo.saveCDInfo( titleField.getText(), targetTimeField.getText(),
                     textColorComboBox.getSelectedItem().toString(), bgColorComboBox.getSelectedItem().toString(), mainColorComboBox.getSelectedItem().toString(),
-                    fontComboBox.getSelectedItem().toString());
+                    fontComboBox.getSelectedItem().toString(), canExitCheckBox.isSelected());
             this.dispose();
         });
         pane.add(saveButton, BorderLayout.SOUTH);
@@ -73,35 +74,36 @@ public class SettingsDialog extends JDialog {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new GridLayout(1,2));
         titlePanel.setOpaque(false);
-        titlePanel.add(new JLabel("标题"));
+        titlePanel.add(new JLabel("标题:"));
         titlePanel.add(titleField);
         settingsPanel.add(titlePanel, gbc);
 
         JPanel targetTimePanel = new JPanel();
         targetTimePanel.setLayout(new GridLayout(1,2));
         targetTimePanel.setOpaque(false);
-        targetTimePanel.add(new JLabel("目标时间 (yyyy.MM.dd HH:mm:ss)"));
+        targetTimePanel.add(new JLabel("目标时间 (yyyy.MM.dd HH:mm:ss):"));
 
         targetTimePanel.add(targetTimeField);
         gbc.gridy++;
         settingsPanel.add(targetTimePanel, gbc);
 
         JPanel colorPanel = new JPanel();
+        colorPanel.setBorder(BorderFactory.createTitledBorder("颜色设置"));
         colorPanel.setLayout(new GridLayout(0, 2));
         colorPanel.setOpaque(false);
 
-        colorPanel.add(new JLabel("文字颜色"));
+        colorPanel.add(new JLabel("文字颜色:"));
 
         textColorComboBox.removeAllItems();
         textColorComboBox.addItems(CDInfo.COLOR.getAllColorStyle());
         colorPanel.add(textColorComboBox);
 
-        colorPanel.add(new JLabel("背景颜色"));
+        colorPanel.add(new JLabel("背景色:"));
         bgColorComboBox.removeAllItems();
         bgColorComboBox.addItems(CDInfo.COLOR.getAllColorStyle());
         colorPanel.add(bgColorComboBox);
 
-        colorPanel.add(new JLabel("主色"));
+        colorPanel.add(new JLabel("主题色:"));
         mainColorComboBox.removeAllItems();
         mainColorComboBox.addItems(CDInfo.COLOR.getAllColorStyle());
         colorPanel.add(mainColorComboBox);
@@ -111,13 +113,15 @@ public class SettingsDialog extends JDialog {
         JPanel fontPanel = new JPanel();
         fontPanel.setLayout(new GridLayout(1,2));
         fontPanel.setOpaque(false);
-        fontPanel.add(new JLabel("字体"));
+        fontPanel.add(new JLabel("字体:"));
         fontComboBox.removeAllItems();
         fontComboBox.addItems(CDFont.getAllFontName());
         fontPanel.add(fontComboBox);
         gbc.gridy++;
         settingsPanel.add(fontPanel, gbc);
 
+        gbc.gridy++;
+        settingsPanel.add(canExitCheckBox, gbc);
 
         pane.add(settingsPanel, BorderLayout.CENTER);
     }

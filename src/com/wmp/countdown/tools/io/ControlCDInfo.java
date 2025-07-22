@@ -36,9 +36,9 @@ public class ControlCDInfo {
             }
             if (jsonObject.has("color")) {
                 JSONObject color = jsonObject.getJSONObject("color");
-                String textColor = "black";
-                String bgColor = "white";
-                String mainColor = "blue";
+                String textColor = "黑色";
+                String bgColor = "白色";
+                String mainColor = "蓝色";
                 if (color.has("textColor")) textColor = color.getString("textColor");
                 if (color.has("bgColor")) bgColor = color.getString("bgColor");
                 if (color.has("mainColor")) mainColor = color.getString("mainColor");
@@ -47,6 +47,10 @@ public class ControlCDInfo {
             }
             if (jsonObject.has("font")) {
                 CDInfo.FONT.setFontName(jsonObject.getString("font"));
+            }
+
+            if (jsonObject.has("isCanExit")) {
+                CDInfo.isCanExit = jsonObject.getBoolean("isCanExit");
             }
 
         } catch (IOException e) {
@@ -64,7 +68,7 @@ public class ControlCDInfo {
         }
     }
 
-    public static void saveCDInfo(String title, String targetTime , String textColorStr, String bgColorStr, String mainColorStr, String fontName) {
+    public static void saveCDInfo(String title, String targetTime , String textColorStr, String bgColorStr, String mainColorStr, String fontName, boolean isCanExit) {
         Log.info.print("ControlCDInfo", "正在保存数据");
         IOForInfo io = new IOForInfo(CDInfo.DATA_PATH + "data.json");
 
@@ -83,6 +87,8 @@ public class ControlCDInfo {
             }
 
             jsonObject.put("font", fontName);
+
+            jsonObject.put("isCanExit", isCanExit);
 
             io.SetInfo(jsonObject.toString());
         } catch (IOException e) {

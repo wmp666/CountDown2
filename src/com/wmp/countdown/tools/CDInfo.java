@@ -12,8 +12,8 @@ import java.util.Date;
 public class CDInfo {
 
     public static final String NAME = "Countdown";
-    public static final String VERSION = "2.0.0";
-    public static final String AUTHOR = "WMP";
+    public static final String VERSION = "2.1.0";
+    public static final String AUTHOR = "无名牌";
 
     public static final String DATA_PATH;
     public static final String TEMP_PATH;
@@ -26,6 +26,8 @@ public class CDInfo {
     public static final CDColor COLOR = new CDColor();
 
     public static final CDFont FONT = new CDFont();
+
+    public static boolean isCanExit = true;
 
     static{
         //加载基础目录
