@@ -12,7 +12,7 @@ import java.util.Date;
 public class CDInfo {
 
     public static final String NAME = "Countdown";
-    public static final String VERSION = "2.1.0";
+    public static final String VERSION = "2.2.0";
     public static final String AUTHOR = "无名牌";
 
     public static final String DATA_PATH;

@@ -25,12 +25,6 @@ public class CDButtonsPanel extends JPanel implements CDComponent{
         exitButton.setFont(CDInfo.FONT.getCDFont(Font.BOLD, CDFontSizeStyle.NORMAL));
         exitButton.addActionListener(e -> {
 
-            if (!CDInfo.isCanExit) {
-                Log.err.print("退出", "错误的关闭请求");
-                return;
-            }
-
-
             int i = Log.info.showChooseDialog(null, "退出", "是否退出?");
             if (i == JOptionPane.YES_OPTION){
                 Log.exit(0);
@@ -44,7 +38,7 @@ public class CDButtonsPanel extends JPanel implements CDComponent{
             try {
                 new SettingsDialog();
             } catch (Exception ex) {
-                Log.err.print( "Log", "关于窗口打开失败:" +  ex);
+                Log.err.print( "Log", "设置窗口打开失败:" +  ex);
                 throw new RuntimeException(ex);
             }
         });

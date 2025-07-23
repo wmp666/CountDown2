@@ -95,7 +95,7 @@ public class IOForInfo {
 
             String replace = s.replace("\n", "\\n");
 
-            Log.info.print("IOForInfo-获取数据", "数据内容: " + replace);
+            //Log.info.print("IOForInfo-获取数据", "数据内容: " + replace);
             Log.info.print("IOForInfo-获取数据", file.getPath() + "文件读取完成");
             return  s ;
         } catch (IOException e) {

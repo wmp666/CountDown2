@@ -28,7 +28,7 @@ public class TimePanel extends JPanel implements CDComponent {
         this.add(dayLabel, BorderLayout.CENTER);
         this.add(otherTimeLabel, BorderLayout.SOUTH);
 
-        Timer timer = new Timer(200, e -> {
+        Timer timer = new Timer(34, e -> {
             String targetTime = CDInfo.targetTime;
             DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
             long time = 0;

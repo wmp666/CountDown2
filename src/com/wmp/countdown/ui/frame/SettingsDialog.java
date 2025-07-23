@@ -4,6 +4,8 @@ import com.wmp.WCompanent.WComboBox;
 import com.wmp.WCompanent.WTextButton;
 import com.wmp.WCompanent.WTextField;
 import com.wmp.countdown.tools.CDInfo;
+import com.wmp.countdown.tools.ControlPassword;
+import com.wmp.countdown.tools.OpenInExp;
 import com.wmp.countdown.tools.io.ControlCDInfo;
 import com.wmp.countdown.tools.printLog.Log;
 import com.wmp.countdown.tools.uiTools.CDFont;
@@ -29,9 +31,13 @@ public class SettingsDialog extends JDialog {
 
 
     public SettingsDialog() {
+
+        if( !ControlPassword.checkPassword()) return;
+
+
         initFrame();
 
-
+        initMenuBar();
 
         Container pane = this.getContentPane();
         pane.setLayout(new BorderLayout());
@@ -58,6 +64,47 @@ public class SettingsDialog extends JDialog {
         this.setVisible(true);
     }
 
+    private void initMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("文件");
+
+        JMenuItem openInExpMenuItem = new JMenuItem("打开于资源管理器");
+        openInExpMenuItem.addActionListener(e -> {
+            Log.info.message(this, "SettingsDialog", "正在打开文件资源管理器");
+            OpenInExp.open(CDInfo.DATA_PATH);
+        });
+        fileMenu.add(openInExpMenuItem);
+
+        JMenuItem saveMenuItem = new JMenuItem("保存");
+        saveMenuItem.addActionListener(e -> {
+            Log.info.print(this, "SettingsDialog", "正在保存设置");
+            ControlCDInfo.saveCDInfo( titleField.getText(), targetTimeField.getText(),
+                    textColorComboBox.getSelectedItem().toString(), bgColorComboBox.getSelectedItem().toString(), mainColorComboBox.getSelectedItem().toString(),
+                    fontComboBox.getSelectedItem().toString(), canExitCheckBox.isSelected());
+        });
+        fileMenu.add(saveMenuItem);
+
+        JMenuItem exitMenuItem = new JMenuItem("退出");
+        exitMenuItem.addActionListener(e -> this.dispose());
+        fileMenu.add(exitMenuItem);
+
+
+        JMenu moreMenu = new JMenu("更多");
+
+        JMenuItem setPasswordMenuItem = new JMenuItem("设置密码");
+        setPasswordMenuItem.addActionListener(e -> {
+            Log.info.print(this, "SettingsDialog", "正在设置密码");
+            ControlPassword.setPassword();
+        });
+        moreMenu.add(setPasswordMenuItem);
+
+        menuBar.add(fileMenu);
+        menuBar.add(moreMenu);
+
+        this.setJMenuBar(menuBar);
+    }
+
     private void initSettingsPanel(Container pane) {
         JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new GridBagLayout( ));
@@ -71,21 +118,24 @@ public class SettingsDialog extends JDialog {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new GridLayout(1,2));
-        titlePanel.setOpaque(false);
-        titlePanel.add(new JLabel("标题:"));
-        titlePanel.add(titleField);
-        settingsPanel.add(titlePanel, gbc);
+        JPanel basicDataPanel = new JPanel(new GridLayout(0, 2));
+        basicDataPanel.setOpaque(false);
+        basicDataPanel.setBorder(BorderFactory.createTitledBorder("基本数据"));
 
-        JPanel targetTimePanel = new JPanel();
-        targetTimePanel.setLayout(new GridLayout(1,2));
-        targetTimePanel.setOpaque(false);
-        targetTimePanel.add(new JLabel("目标时间 (yyyy.MM.dd HH:mm:ss):"));
+        //JPanel titlePanel = new JPanel();
+        //titlePanel.setLayout(new GridLayout(1,2));
+        //titlePanel.setOpaque(false);
+        basicDataPanel.add(new JLabel("标题:"));
+        basicDataPanel.add(titleField);
+        //settingsPanel.add(titlePanel, gbc);
 
-        targetTimePanel.add(targetTimeField);
-        gbc.gridy++;
-        settingsPanel.add(targetTimePanel, gbc);
+        //JPanel targetTimePanel = new JPanel();
+        //targetTimePanel.setLayout(new GridLayout(1,2));
+        //targetTimePanel.setOpaque(false);
+        basicDataPanel.add(new JLabel("目标时间 (yyyy.MM.dd HH:mm:ss):"));
+        basicDataPanel.add(targetTimeField);
+        //gbc.gridy++;
+        settingsPanel.add(basicDataPanel, gbc);
 
         JPanel colorPanel = new JPanel();
         colorPanel.setBorder(BorderFactory.createTitledBorder("颜色设置"));

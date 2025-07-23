@@ -24,7 +24,7 @@ public class Log {
     private static int index = 0;
 
 
-    private static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(CDInfo.class.getResource(CDInfo.ICON_PATH), 16, 16).getImage(), "ClassTools");
+    private static final TrayIcon trayIcon = new TrayIcon(GetIcon.getImageIcon(CDInfo.class.getResource(CDInfo.ICON_PATH), 16, 16).getImage(), "CountDown");
 
     private static final JTextArea textArea = new JTextArea();
 
@@ -75,10 +75,14 @@ public class Log {
     public static void exit(int status) {
 
         // 改为自动关闭窗口
-        System.exit(status);
+        if (!CDInfo.isCanExit) {
+            Log.err.print("退出", "错误的关闭请求");
+            return;
+        }
 
 
         saveLog(false);
+        System.exit(status);
     }
 
     public static void systemPrint(LogStyle style, String owner, String logInfo) {
