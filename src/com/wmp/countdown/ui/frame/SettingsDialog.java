@@ -3,6 +3,7 @@ package com.wmp.countdown.ui.frame;
 import com.wmp.WCompanent.WComboBox;
 import com.wmp.WCompanent.WTextButton;
 import com.wmp.WCompanent.WTextField;
+import com.wmp.WCompanent.tools.GetIcon;
 import com.wmp.countdown.tools.CDInfo;
 import com.wmp.countdown.tools.ControlPassword;
 import com.wmp.countdown.tools.OpenInExp;
@@ -46,6 +47,7 @@ public class SettingsDialog extends JDialog {
         initSettingsPanel(pane);
 
         WTextButton saveButton = new WTextButton("保存");
+        saveButton.setIcon(GetIcon.getIcon(getClass().getResource("/images/light/save_0.png"), 20, 20));
         saveButton.setFont( CDInfo.FONT.getCDFont(Font.PLAIN, CDFontSizeStyle.NORMAL));
         saveButton.addActionListener(e -> {
             Log.info.message(this, "SettingsDialog", "正在保存设置");
@@ -70,6 +72,7 @@ public class SettingsDialog extends JDialog {
         JMenu fileMenu = new JMenu("文件");
 
         JMenuItem openInExpMenuItem = new JMenuItem("打开于资源管理器");
+        openInExpMenuItem.setIcon(GetIcon.getIcon(getClass().getResource("/images/openExp.png"), 20, 20));
         openInExpMenuItem.addActionListener(e -> {
             Log.info.message(this, "SettingsDialog", "正在打开文件资源管理器");
             OpenInExp.open(CDInfo.DATA_PATH);
@@ -77,6 +80,7 @@ public class SettingsDialog extends JDialog {
         fileMenu.add(openInExpMenuItem);
 
         JMenuItem saveMenuItem = new JMenuItem("保存");
+        saveMenuItem.setIcon(GetIcon.getIcon(getClass().getResource("/images/light/save_0.png"), 20, 20));
         saveMenuItem.addActionListener(e -> {
             Log.info.print(this, "SettingsDialog", "正在保存设置");
             ControlCDInfo.saveCDInfo( titleField.getText(), targetTimeField.getText(),
@@ -122,16 +126,10 @@ public class SettingsDialog extends JDialog {
         basicDataPanel.setOpaque(false);
         basicDataPanel.setBorder(BorderFactory.createTitledBorder("基本数据"));
 
-        //JPanel titlePanel = new JPanel();
-        //titlePanel.setLayout(new GridLayout(1,2));
-        //titlePanel.setOpaque(false);
+
         basicDataPanel.add(new JLabel("标题:"));
         basicDataPanel.add(titleField);
-        //settingsPanel.add(titlePanel, gbc);
 
-        //JPanel targetTimePanel = new JPanel();
-        //targetTimePanel.setLayout(new GridLayout(1,2));
-        //targetTimePanel.setOpaque(false);
         basicDataPanel.add(new JLabel("目标时间 (yyyy.MM.dd HH:mm:ss):"));
         basicDataPanel.add(targetTimeField);
         //gbc.gridy++;
@@ -184,6 +182,7 @@ public class SettingsDialog extends JDialog {
         bgColorComboBox.setSelectedItem(CDInfo.COLOR.getBgColorStr());
         mainColorComboBox.setSelectedItem(CDInfo.COLOR.getMainColorStr());
         fontComboBox.setSelectedItem(CDInfo.FONT.getFontName());
+        canExitCheckBox.setSelected(CDInfo.isCanExit);
     }
 
     private void initFrame() {

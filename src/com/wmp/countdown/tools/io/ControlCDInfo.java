@@ -69,7 +69,7 @@ public class ControlCDInfo {
     }
 
     public static void saveCDInfo(String title, String targetTime , String textColorStr, String bgColorStr, String mainColorStr, String fontName, boolean isCanExit) {
-        Log.info.print("ControlCDInfo", "正在保存数据");
+        Log.info.systemPrint("ControlCDInfo", "正在保存数据");
         IOForInfo io = new IOForInfo(CDInfo.DATA_PATH + "data.json");
 
         try {
@@ -91,6 +91,8 @@ public class ControlCDInfo {
             jsonObject.put("isCanExit", isCanExit);
 
             io.SetInfo(jsonObject.toString());
+
+            Log.info.print("ControlCDInfo", "数据保存成功");
         } catch (IOException e) {
             Log.err.print("ControlCDInfo", "数据保存失败:\n" + e.getMessage());
         }
