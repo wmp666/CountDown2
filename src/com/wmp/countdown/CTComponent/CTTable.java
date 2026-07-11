@@ -1,0 +1,49 @@
+package com.wmp.countdown.CTComponent;
+
+import com.wmp.publicTools.UITools.CTFont;
+import com.wmp.publicTools.UITools.CTFontSizeStyle;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class CTTable extends JTable {
+
+    public CTTable() {
+        this(new Object[][]{}, new Object[]{});
+    }
+
+    public CTTable(Object[][] data, Object[] columnNames) {
+        super(data, columnNames);
+        this.getTableHeader().setReorderingAllowed(false);// 列不允许拖动
+        this.setFont(CTFont.getCTFont(Font.PLAIN, CTFontSizeStyle.SMALL));
+        this.setRowHeight(CTFont.getSize(CTFontSizeStyle.SMALL));
+        this.getTableHeader().setFont(CTFont.getCTFont(Font.PLAIN, CTFontSizeStyle.SMALL));
+
+        this.setCellEditor(new DefaultCellEditor(new CTTextField()));
+    }
+
+    public Object[][] getData() {
+        int rowCount = this.getRowCount();
+        int columnCount = this.getColumnCount();
+        Object[][] data = new Object[rowCount][columnCount];
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columnCount; j++) {
+                data[i][j] = this.getValueAt(i, j);
+            }
+        }
+        return data;
+    }
+
+    public String[][] getStrData() {
+        int rowCount = this.getRowCount();
+        int columnCount = this.getColumnCount();
+        String[][] data = new String[rowCount][columnCount];
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columnCount; j++) {
+                data[i][j] = this.getValueAt(i, j).toString();
+            }
+        }
+        return data;
+    }
+
+}

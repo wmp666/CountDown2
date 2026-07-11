@@ -1,0 +1,22 @@
+[
+  {
+    "style": "default",
+    "name": "default",
+    "path": "/image/default.png"
+  },
+  {
+    "style": "png",
+    "name": "系统.提示.提示",
+    "path": "/image/optionDialogIcon/information.png"
+  },
+  {
+    "style": "png",
+    "name": "系统.提示.警告",
+    "path": "/image/optionDialogIcon/warn.png"
+  },
+  {
+    "style": "png",
+    "name": "系统.提示.错误",
+    "path": "/image/optionDialogIcon/error.png"
+  }
+]

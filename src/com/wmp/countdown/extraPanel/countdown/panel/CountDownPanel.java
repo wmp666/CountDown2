@@ -1,0 +1,109 @@
+package com.wmp.countdown.extraPanel.countdown.panel;
+
+import com.wmp.publicTools.DateTools;
+import com.wmp.publicTools.UITools.CTColor;
+import com.wmp.publicTools.UITools.CTFont;
+import com.wmp.publicTools.UITools.CTFontSizeStyle;
+import com.wmp.publicTools.appFileControl.CTInfoControl;
+import com.wmp.publicTools.printLog.Log;
+import com.wmp.countdown.CTComponent.CTPanel.CTViewPanel;
+import com.wmp.countdown.extraPanel.countdown.CDInfoControl;
+import com.wmp.countdown.extraPanel.countdown.CountDownInfo;
+import com.wmp.countdown.extraPanel.countdown.CountDownInfos;
+import com.wmp.countdown.extraPanel.countdown.settings.CountDownSetsPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class CountDownPanel extends CTViewPanel<CountDownInfos> {
+    private CountDownInfo info = getInfoControl().getInfo().getLatestInfo();
+
+    private final JLabel titleLabel = new JLabel();
+    private final JLabel timeLabel = new JLabel();
+
+    private final AtomicBoolean b = new AtomicBoolean(false);
+
+    public CountDownPanel() {
+        this.setID("CountDownPanel");
+        this.setName("倒计时界面");
+        this.setLayout(new BorderLayout());
+        this.setOpaque(false);
+        this.setCtSetsPanelList(List.of(new CountDownSetsPanel(getInfoControl())));
+
+        initUI();
+
+        this.add(titleLabel, BorderLayout.NORTH);
+        this.add(timeLabel, BorderLayout.CENTER);
+
+        this.setIndependentRefresh(true, 34);
+
+    }
+
+    private void initUI() {
+
+
+        titleLabel.setText("距" + info.title() + "还剩:");
+        titleLabel.setForeground(CTColor.textColor);
+        titleLabel.setFont(CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.NORMAL));
+
+        timeLabel.setForeground(CTColor.mainColor);
+        timeLabel.setFont(CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.BIG));
+    }
+
+    @Override
+    public void strongRefresh() throws Exception {
+        info = getInfoControl().refresh().getLatestInfo();
+        super.strongRefresh();
+    }
+
+    @Override
+    public CTInfoControl<CountDownInfos> setInfoControl() {
+        return new CDInfoControl();
+    }
+
+    @Override
+    protected void easyRefresh() {
+        initUI();
+
+        String targetTime = info.targetTime();
+        long time = 0;
+        try {
+            // 获取时间, 并计算时间差
+            time = DateTools.getRemainderTime(targetTime, "yyyy.MM.dd HH:mm:ss");
+        } catch (Exception ex) {
+            Log.err.print(getClass(), "时间数据化异常", ex);
+        }
+        //Log.info.print("时间显示","时间差:" + time);
+        if (time < -10 * 1000) {
+            CountDownInfo old = info;
+            info = getInfoControl().getInfo().getLatestInfo();
+            if (!old.title().equals(info.title()) && info.title().equals("数据出错")) {
+                Log.info.systemPrint("时间显示", "已切换倒计时");
+            }
+        }
+
+        if (time <= 0) {
+
+            timeLabel.setText("已结束");
+            if (!b.get()) {
+                Log.info.adaptedMessage(info.title() + "倒计时", "已结束", 60, 3);
+            }
+            b.set(true);
+            return;
+        }
+
+        b.set(false);
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%02d", time / (24L * 60 * 60 * 1000)))
+                .append("天");
+        time %= 24L * 60 * 60 * 1000;// 去除n天(n * 24h)的时间,只留下余数
+        sb.append(String.format("%02d时%02d分%02d秒", time / 3600000, time / 60000 % 60, time / 1000 % 60));
+
+        timeLabel.setText(sb.toString());
+
+        this.revalidate();
+        this.repaint();
+    }
+}
