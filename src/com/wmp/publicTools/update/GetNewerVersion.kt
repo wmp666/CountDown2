@@ -182,8 +182,8 @@ object GetNewerVersion {
 
                     try {
                         copyFile(
-                            Path.of(CTInfo.TEMP_PATH, "UpdateFile", "ClassTools.jar"),
-                            Path.of(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "ClassTools.jar")
+                            Path.of(CTInfo.TEMP_PATH, "UpdateFile", "CountDown2.jar"),
+                            Path.of(GetPath.getAppPath(GetPath.SOURCE_FILE_PATH), "CountDown2.jar")
                         )
                     } catch (e: Exception) {
                         Log.err.print(dialog, GetNewerVersion::class.java, "更新文件失败", e)

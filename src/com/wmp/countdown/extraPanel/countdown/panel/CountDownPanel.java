@@ -22,6 +22,10 @@ public class CountDownPanel extends CTViewPanel<CountDownInfos> {
 
     private final JLabel titleLabel = new JLabel();
     private final JLabel timeLabel = new JLabel();
+    private final JLabel restTimeLabel = new JLabel();
+
+    private final Font bigFont = CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.MORE_BIG);
+    private final Font normalFont = CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.BIG);
 
     private final AtomicBoolean b = new AtomicBoolean(false);
 
@@ -36,6 +40,7 @@ public class CountDownPanel extends CTViewPanel<CountDownInfos> {
 
         this.add(titleLabel, BorderLayout.NORTH);
         this.add(timeLabel, BorderLayout.CENTER);
+        this.add(restTimeLabel, BorderLayout.SOUTH);
 
         this.setIndependentRefresh(true, 34);
 
@@ -49,7 +54,12 @@ public class CountDownPanel extends CTViewPanel<CountDownInfos> {
         titleLabel.setFont(CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.NORMAL));
 
         timeLabel.setForeground(CTColor.mainColor);
-        timeLabel.setFont(CTFont.getCTFont(Font.BOLD, CTFontSizeStyle.BIG));
+        timeLabel.setFont(bigFont);
+        timeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+        restTimeLabel.setForeground(CTColor.mainColor);
+        restTimeLabel.setFont(normalFont);
+        restTimeLabel.setHorizontalAlignment(SwingConstants.LEFT);
     }
 
     @Override
@@ -87,6 +97,7 @@ public class CountDownPanel extends CTViewPanel<CountDownInfos> {
         if (time <= 0) {
 
             timeLabel.setText("已结束");
+            restTimeLabel.setText("");
             if (!b.get()) {
                 Log.info.adaptedMessage(info.title() + "倒计时", "已结束", 60, 3);
             }
@@ -95,15 +106,55 @@ public class CountDownPanel extends CTViewPanel<CountDownInfos> {
         }
 
         b.set(false);
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%02d", time / (24L * 60 * 60 * 1000)))
-                .append("天");
-        time %= 24L * 60 * 60 * 1000;// 去除n天(n * 24h)的时间,只留下余数
-        sb.append(String.format("%02d时%02d分%02d秒", time / 3600000, time / 60000 % 60, time / 1000 % 60));
-
-        timeLabel.setText(sb.toString());
+        timeLabel.setText(buildTimeText(time));
 
         this.revalidate();
         this.repaint();
+    }
+
+    /**
+     * 构建倒计时显示：主要单位（大字体，显示在提示词下方），其余时间（原字体，显示在下方）。
+     * 天不足1天时主要显示小时，小时不足1时主要显示分钟，以此类推到秒。
+     */
+    private String buildTimeText(long time) {
+        long days = time / (24L * 60 * 60 * 1000);
+        long rem = time % (24L * 60 * 60 * 1000);// 去除n天(n * 24h)的时间,只留下余数
+        long hours = rem / 3600000;
+        long minutes = rem / 60000 % 60;
+        long seconds = rem / 1000 % 60;
+
+        String primary;
+        String rest;
+        if (days >= 1) {
+            primary = String.format("%02d天", days);
+            rest = buildRest(hours, minutes, seconds);
+        } else if (hours >= 1) {
+            primary = String.format("%02d时", hours);
+            rest = buildRest(0, minutes, seconds);
+        } else if (minutes >= 1) {
+            primary = String.format("%02d分", minutes);
+            rest = buildRest(0, 0, seconds);
+        } else {
+            primary = String.format("%02d秒", seconds);
+            rest = "";
+        }
+
+        restTimeLabel.setText(rest);
+        return primary;
+    }
+
+    /** 将剩余的时间分量拼接为"X时X分X秒"，省略值为0的分量。 */
+    private String buildRest(long hours, long minutes, long seconds) {
+        StringBuilder sb = new StringBuilder();
+        if (hours > 0) {
+            sb.append(String.format("%02d时", hours));
+        }
+        if (minutes > 0) {
+            sb.append(String.format("%02d分", minutes));
+        }
+        if (seconds > 0) {
+            sb.append(String.format("%02d秒", seconds));
+        }
+        return sb.toString();
     }
 }

@@ -10,8 +10,8 @@ object CTFont {
     private var fontName: String = "微软雅黑"
 
     private var BigBigSize = 100
-    private var moreBigSize = 60
-    private var bigSize = 20
+    private var moreBigSize = 35
+    private var bigSize = 23
     private var normalSize = 19
     private var smallSize = 15
     private var moreSmallSize = 12
